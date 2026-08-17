@@ -1,0 +1,29 @@
+{% canopy config %}
+{
+    "title": "Footer",
+    "name": "footer",
+    "settings": [
+        {
+            "name": "logo",
+            "type": "text",
+            "label": "Wordmark",
+            "default": "LUMÉA"
+        },
+        {
+            "name": "copyright",
+            "type": "text",
+            "label": "Copyright",
+            "default": "© 2026 LUMÉA. All rights reserved. Skin Science, Adapted."
+        }
+    ]
+}
+{% endcanopy %}
+
+{% canopy template %}
+<footer class="bg-ink text-white">
+  <div class="mx-auto flex max-w-[1440px] flex-col gap-6 px-6 py-16 md:flex-row md:items-start md:justify-between md:px-10 lg:px-20">
+    <a href="/" class="font-display text-[20px] font-semibold">{{ settings.logo }}</a>
+    <p class="text-[12px] text-white/50">{{ settings.copyright }}</p>
+  </div>
+</footer>
+{% endcanopy %}

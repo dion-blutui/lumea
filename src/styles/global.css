@@ -1,0 +1,15 @@
+@import "tailwindcss";
+
+@source "../../views";
+
+@theme {
+  --font-sans: "Manrope", ui-sans-serif, system-ui, -apple-system, sans-serif;
+  --font-display: "Cormorant Garamond", Georgia, "Times New Roman", serif;
+
+  --color-cream: #faf8f5;
+  --color-sand: #f2ece4;
+  --color-ink: #1c1b19;
+  --color-muted: #5d5955;
+  --color-line: #eae5df;
+  --color-moss: #2d3d2b;
+}

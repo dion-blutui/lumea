@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>{% block title %}{{ settings.site_name }}{% endblock %}</title>
+
+    <link rel="preconnect" href="https://fonts.bunny.net" />
+    <link
+      href="https://fonts.bunny.net/css?family=cormorant-garamond:400,500,600|manrope:400,600,700&display=swap"
+      rel="stylesheet"
+    />
+
+    {{ asset('styles/global.css') | stylesheet_tag }}
+
+    {{ canopy.head('main') }}
+    {{ canopy.head('footer') }}
+
+    {% block styles %}{% endblock %}
+  </head>
+  <body class="antialiased bg-cream font-sans text-ink">
+    {{ include('components/header.html') }}
+
+    <main>{% block body %}{% endblock %}</main>
+
+    {{ canopy.blocks('footer', ['footer'], { shared: true }) }}
+
+    {{ asset('js/app.js') | script_tag }}
+
+    {{ canopy.scripts('main') }}
+    {{ canopy.scripts('footer') }}
+
+    {% block scripts %}{% endblock %}
+  </body>
+</html>

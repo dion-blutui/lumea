@@ -1,0 +1,135 @@
+{% canopy config %}
+{
+    "title": "Hero",
+    "name": "hero",
+    "settings": [
+        {
+            "name": "eyebrow",
+            "type": "text",
+            "label": "Eyebrow",
+            "tab": "Content",
+            "default": "Luméa Skin Science",
+            "help": "Small uppercase label above the headline"
+        },
+        {
+            "name": "heading",
+            "type": "heading",
+            "label": "Headline",
+            "tab": "Content",
+            "elements": [
+                { "value": "h1", "label": "Heading 1" },
+                { "value": "h2", "label": "Heading 2" }
+            ],
+            "default": { "value": "Hydration that adapts to you.", "element": "h1" }
+        },
+        {
+            "name": "description",
+            "type": "textarea",
+            "label": "Description",
+            "tab": "Content",
+            "default": "A weightless water cream designed to keep skin hydrated, balanced and comfortable — even in changing climates."
+        },
+        {
+            "name": "primary_cta",
+            "type": "url",
+            "label": "Primary button",
+            "tab": "Content",
+            "group": "Actions",
+            "default": { "url": "/skincare", "text": "Discover your skin", "target": "_self" }
+        },
+        {
+            "name": "secondary_link",
+            "type": "url",
+            "label": "Secondary link",
+            "tab": "Content",
+            "group": "Actions",
+            "default": { "url": "/skincare/hydra-adapt", "text": "Shop Hydra-Adapt™", "target": "_self" }
+        },
+        {
+            "name": "image",
+            "type": "file",
+            "label": "Image",
+            "accept": "image/*",
+            "tab": "Media",
+            "description": "Leave empty to use the placeholder image."
+        },
+        {
+            "name": "image_alt",
+            "type": "text",
+            "label": "Image alt text",
+            "tab": "Media",
+            "default": "Luméa Hydra-Adapt water cream"
+        },
+        {
+            "name": "media_position",
+            "type": "radio",
+            "label": "Image position",
+            "tab": "Style",
+            "options": [
+                { "value": "right", "label": "Right" },
+                { "value": "left", "label": "Left" }
+            ],
+            "default": "right"
+        }
+    ]
+}
+{% endcanopy %}
+
+{% canopy template %}
+<section class="bg-cream">
+  <div class="mx-auto flex max-w-[1440px] flex-col items-center gap-16 px-6 py-16 md:px-10 lg:flex-row lg:px-20 lg:py-24">
+    <div class="flex w-full flex-col gap-10 lg:w-[515px] lg:shrink-0 {{ settings.media_position == 'left' ? 'lg:order-2' : '' }}">
+      <div class="flex flex-col gap-4">
+        {% if settings.eyebrow %}
+          <p class="text-[12px] font-bold tracking-[0.08em] text-moss uppercase">{{ settings.eyebrow }}</p>
+        {% endif %}
+
+        <{{ settings.heading.element }} class="font-display text-[44px] leading-[1.1] text-ink sm:text-[56px] lg:text-[64px]">
+          {{ settings.heading.value }}
+        </{{ settings.heading.element }}>
+
+        {% if settings.description %}
+          <p class="text-[16px] leading-[1.6] text-muted">{{ settings.description }}</p>
+        {% endif %}
+      </div>
+
+      {% if settings.primary_cta.url or settings.secondary_link.url %}
+        <div class="flex flex-wrap items-center gap-6">
+          {% if settings.primary_cta.url %}
+            <a
+              href="{{ settings.primary_cta.url }}"
+              target="{{ settings.primary_cta.target }}"
+              class="inline-flex items-center justify-center rounded-full bg-ink px-7 py-3.5 text-[14px] font-semibold tracking-[0.04em] text-white uppercase transition-opacity hover:opacity-85"
+            >
+              {{ settings.primary_cta.text }}
+            </a>
+          {% endif %}
+
+          {% if settings.secondary_link.url %}
+            <a
+              href="{{ settings.secondary_link.url }}"
+              target="{{ settings.secondary_link.target }}"
+              class="group inline-flex items-center gap-1.5 text-[14px] font-semibold tracking-[0.04em] text-ink uppercase"
+            >
+              {{ settings.secondary_link.text }}
+              <span class="transition-transform group-hover:translate-x-1">
+                {{ include('components/icons/arrow-right.html') }}
+              </span>
+            </a>
+          {% endif %}
+        </div>
+      {% endif %}
+    </div>
+
+    {% set hero_image = settings.image.path|default('https://picsum.photos/seed/lumea-hero/1466/1160') %}
+    <div class="w-full flex-1 {{ settings.media_position == 'left' ? 'lg:order-1' : '' }}">
+      <img
+        src="{{ hero_image }}"
+        alt="{{ settings.image_alt }}"
+        class="aspect-[733/580] w-full rounded-3xl object-cover"
+        loading="eager"
+      />
+    </div>
+  </div>
+</section>
+{% endcanopy %}

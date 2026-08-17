@@ -1,0 +1,105 @@
+{% canopy config %}
+{
+    "title": "Promise",
+    "name": "promise",
+    "settings": [
+        {
+            "name": "heading",
+            "type": "heading",
+            "label": "Heading",
+            "tab": "Content",
+            "elements": [
+                { "value": "h2", "label": "Heading 2" },
+                { "value": "h3", "label": "Heading 3" }
+            ],
+            "default": { "value": "Your skin changes.", "element": "h2" }
+        },
+        {
+            "name": "heading_second_line",
+            "type": "text",
+            "label": "Heading second line",
+            "tab": "Content",
+            "default": "Your hydration should too.",
+            "help": "Rendered on its own line inside the heading. Leave empty for a single line."
+        },
+        {
+            "name": "description",
+            "type": "textarea",
+            "label": "Description",
+            "tab": "Content",
+            "default": "Skin doesn't experience the same world every day. Hydra-Adapt™ is designed to deliver lightweight hydration that feels comfortable across different climates, lifestyles and routines."
+        },
+        {
+            "name": "columns",
+            "type": "select",
+            "label": "Card columns",
+            "tab": "Style",
+            "options": [
+                { "value": "2", "label": "Two" },
+                { "value": "3", "label": "Three" },
+                { "value": "4", "label": "Four" }
+            ],
+            "default": "3"
+        }
+    ],
+    "children": {
+        "allow": ["promise/feature-card"],
+        "max": 8,
+        "default": [
+            {
+                "block": "promise/feature-card",
+                "data": {
+                    "label": "01 / Deep Aqua",
+                    "title": "Hydrate",
+                    "description": "Long-lasting, moisture-binding matrix that releases weightless water continuously without feeling heavy on the surface."
+                }
+            },
+            {
+                "block": "promise/feature-card",
+                "data": {
+                    "label": "02 / Micro Balancer",
+                    "title": "Balance",
+                    "description": "Adapts sebum control automatically to prevent midday shine in high humidity, and locks moisture in dry, air-conditioned rooms."
+                }
+            },
+            {
+                "block": "promise/feature-card",
+                "data": {
+                    "label": "03 / Skin Shield",
+                    "title": "Protect",
+                    "description": "Enriched with potent botanical antioxidants to neutralize city pollution stressors while supporting the skin's natural barrier."
+                }
+            }
+        ]
+    }
+}
+{% endcanopy %}
+
+{% canopy template %}
+{% set grid_columns = {
+  '2': 'sm:grid-cols-2',
+  '3': 'sm:grid-cols-2 lg:grid-cols-3',
+  '4': 'sm:grid-cols-2 lg:grid-cols-4'
+} %}
+
+<section class="bg-sand">
+  <div class="mx-auto flex max-w-[1440px] flex-col gap-16 px-6 py-20 md:px-10 lg:px-20 lg:py-30">
+    <div class="flex max-w-[843px] flex-col gap-6">
+      <{{ settings.heading.element }} class="font-display text-[32px] leading-[1.2] text-ink sm:text-[38px] lg:text-[44px]">
+        {{ settings.heading.value }}
+        {% if settings.heading_second_line %}
+          <br />{{ settings.heading_second_line }}
+        {% endif %}
+      </{{ settings.heading.element }}>
+
+      {% if settings.description %}
+        <p class="text-[16px] leading-[1.6] text-muted">{{ settings.description }}</p>
+      {% endif %}
+    </div>
+
+    <div class="grid grid-cols-1 gap-8 {{ grid_columns[settings.columns]|default('sm:grid-cols-2 lg:grid-cols-3') }}">
+      {{ canopy.children() }}
+    </div>
+  </div>
+</section>
+{% endcanopy %}

@@ -1,0 +1,123 @@
+{% canopy config %}
+{
+    "title": "Climate story",
+    "name": "climate_story",
+    "settings": [
+        {
+            "name": "source",
+            "type": "collection",
+            "label": "Climates collection",
+            "tab": "Content",
+            "default": "climates",
+            "help": "Every entry in the chosen collection is rendered as a panel.",
+            "description": "Manage the cities, temperatures, humidity and imagery in the Climates collection."
+        },
+        {
+            "name": "limit",
+            "type": "number",
+            "label": "Maximum panels",
+            "tab": "Content",
+            "min": 1,
+            "max": 6,
+            "default": 2
+        },
+        {
+            "name": "heading",
+            "type": "heading",
+            "label": "Heading",
+            "tab": "Content",
+            "group": "Narrative",
+            "elements": [
+                { "value": "h2", "label": "Heading 2" },
+                { "value": "h3", "label": "Heading 3" }
+            ],
+            "default": { "value": "One formula. / Different environments.", "element": "h2" }
+        },
+        {
+            "name": "description",
+            "type": "textarea",
+            "label": "Description",
+            "tab": "Content",
+            "group": "Narrative",
+            "default": "From the tropical warmth of Southeast Asia to the crisp seasonal changes of East Asia. Our bio-adaptive complex feels like your favorite bare-skin luxury, regulating cellular hydration dynamically."
+        },
+        {
+            "name": "link",
+            "type": "url",
+            "label": "Link",
+            "tab": "Content",
+            "group": "Narrative",
+            "default": { "url": "/our-science", "text": "See how it adapts", "target": "_self" }
+        },
+        {
+            "name": "overlay",
+            "type": "checkbox",
+            "label": "Darken panel images",
+            "tab": "Style",
+            "default": true
+        }
+    ]
+}
+{% endcanopy %}
+
+{% canopy template %}
+<section class="bg-cream">
+  <div class="mx-auto flex max-w-[1440px] flex-col gap-20 px-6 py-20 md:px-10 lg:px-20 lg:py-30">
+    {% if settings.source and settings.source.entries|length > 0 %}
+      {% set panels = settings.source.entries|sort((a, b) => a.order <=> b.order)|slice(0, settings.limit|default(2)) %}
+
+      <div class="grid grid-cols-1 gap-8 md:grid-cols-2">
+        {% for entry in panels %}
+          {% set panel_image = entry.image|default('https://picsum.photos/seed/lumea-' ~ (entry.city|slug) ~ '/1248/1000') %}
+
+          <article class="relative flex h-[380px] flex-col justify-end overflow-hidden rounded-3xl p-8 lg:h-[500px] lg:p-10">
+            <img
+              src="{{ panel_image }}"
+              alt="{{ entry.city }}"
+              class="absolute inset-0 h-full w-full object-cover"
+              loading="lazy"
+            />
+            {% if settings.overlay %}
+              <div class="absolute inset-0 bg-ink/25"></div>
+            {% endif %}
+
+            <div class="relative flex flex-col gap-2 text-white">
+              {% if entry.eyebrow %}
+                <p class="text-[12px] font-bold tracking-[0.08em] uppercase opacity-80">{{ entry.eyebrow }}</p>
+              {% endif %}
+              <p class="font-display text-[26px] font-medium lg:text-[32px]">
+                {{ entry.city }}{% if entry.temperature %} / {{ entry.temperature }}{% endif %}{% if entry.humidity %} / {{ entry.humidity }}{% endif %}
+              </p>
+            </div>
+          </article>
+        {% endfor %}
+      </div>
+    {% endif %}
+
+    <div class="flex flex-col gap-12 lg:flex-row lg:items-start lg:justify-between lg:gap-16">
+      <{{ settings.heading.element }} class="font-display text-[34px] leading-[1.1] text-ink lg:w-[624px] lg:text-[48px]">
+        {{ settings.heading.value }}
+      </{{ settings.heading.element }}>
+
+      <div class="flex flex-col gap-8 lg:w-[515px] lg:shrink-0">
+        {% if settings.description %}
+          <p class="text-[16px] leading-[1.6] text-muted">{{ settings.description }}</p>
+        {% endif %}
+
+        {% if settings.link.url %}
+          <a
+            href="{{ settings.link.url }}"
+            target="{{ settings.link.target }}"
+            class="group inline-flex items-center gap-1.5 text-[14px] font-semibold tracking-[0.04em] text-ink uppercase"
+          >
+            {{ settings.link.text }}
+            <span class="transition-transform group-hover:translate-x-1">
+              {{ include('components/icons/arrow-right.html') }}
+            </span>
+          </a>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</section>
+{% endcanopy %}
